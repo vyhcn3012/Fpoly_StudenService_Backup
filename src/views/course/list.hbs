@@ -1,0 +1,157 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container">
+         <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-link" href="/courses/chuyen-nganh/them-moi">Thêm mới</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Advanced Tables -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên Ngành</th>
+                                        <th>Các chuyên ngành hẹp</th>
+                                        <th class="action">Xem</th>
+                                        <th class="action">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    {{#each courses}}
+                                    <tr>
+                                        <td>{{this.course_name}}</td>
+                                        <td>{{this.available}}</td>
+                                        <td>
+                                            <select style="width:200px;">
+                                                {{#each this.majors}}
+                                                <option>{{this.major_name}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </td>
+                                         <td class="action">
+                                            <button data-toggle="modal" data-target="#myModal"
+                                                onclick="edit('{{this._id}}')" class="btn btn-link">
+                                                <i class="fa fa-edit "></i> Chi tiết
+                                            </button>
+                                        </td>
+                                         <td class="action">
+                                            <button data-toggle="modal" data-target="#myModal"
+                                                onclick="goDelete('{{this._id}}')" class="btn btn-link">
+                                                <i class="fa fa-edit "></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            {{!-- <div class="col-md-6">
+                                {{#if }}
+                                <a href="/users?page={{previous}}&department={{department}}"
+                                    class="btn btn-link pull-left">
+                                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                    <span>Trang trước</span>
+                                </a>
+                                {{/if}}
+                            </div>
+                            <div class="col-md-6">
+                                {{#if}}
+                                <a href="/users?page={{next}}&department={{department}}"
+                                    class="btn btn-link pull-right">
+                                    <span>Trang sau</span>
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </a>
+                                {{/if}}
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+                <!--End Advanced Tables -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    let delete_id;
+    const goDelete = (id) => {
+        delete_id = id;
+        onDelete();
+    }
+    const edit = (id) => {
+      window.location.href = `/courses/chuyen-nganh/${id}/cap-nhat`
+    }
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const onDelete = async () => {
+         swal("Xác nhận xóa ngành học này ?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+                const option = {
+                    method: 'delete',
+                    headers: { 'Content-Type': 'application/json' },
+                
+                }
+                const url = `/api/courses/chuyen-nganh/${delete_id}/xoa`;
+
+                try {
+                    await fetchAPI(url, option);
+                    window.location.href = '/courses/chuyen-nganh';
+                } catch (e) { swal(`Lỗi: ${e.message}`) }
+            })
+    }
+
+   
+</script>

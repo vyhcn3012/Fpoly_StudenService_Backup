@@ -1,0 +1,277 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-link" href="/dao-tao/chuyen-nganh-hoc/them-moi">Thêm mới</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Advanced Tables -->
+                {{!-- <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>MSSV</th>
+                                        <th>Tên</th>
+                                        <th>Khóa học hiện tại</th>
+                                        <th>Ngành học hiện tại</th>
+                                        <th>Học kỳ kiện tại</th>
+                                        <th>Ngành học yêu cầu</th>
+                                        <th>Học kỳ yêu cầu</th>
+                                        <th>Lý do yêu cầu</th>
+                                        <th>Cập nhật lúc</th>
+                                        <th class="action">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    {{#each coursePapers}}
+                                    <tr>
+                                        <td>{{index @index}}</td>
+                                        {{#version}}
+                                        <td>{{this.student_code}}</td>
+                                        <td>{{this.fullname}}</td>
+                                        <td>{{this.current_course}}</td>
+                                        <td>{{this.current_major}}</td>
+                                        <td>{{this.current_semester}}</td>
+                                        <td>{{this.requested_course}}</td>
+                                        <td>{{this.requested_semester}}</td>
+                                        <td>{{this.requested_reason}}</td>
+                                        {{/version}}
+                                        <td>
+                                            <p>{{formatDate this.updatedAt 1}}</p>
+                                            <p>{{formatTime this.updatedAt 1}}</p>
+                                        </td>
+                                        <td class="action">
+                                            <button data-toggle="modal" data-target="#myModal"
+                                                onclick="detail('{{this._id}}')" class="btn btn-link">
+                                                <i class="fa fa-edit "></i> Chi tiết
+                                            </button>
+                                            <a class="btn btn-link" href= 'chuyen-nganh-hoc/sua/{{this._id}}'>Sửa</a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> --}}
+                <!--End Advanced Tables -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" scope="col">#</th>
+                            <th rowspan="2" scope="col">MSSV</th>
+                            <th rowspan="2" scope="col">Họ Tên</th>
+                            <th colspan="3" style="text-align: center;">Hiện tại</th>
+                            <th colspan="3" style="text-align: center;">Sau chuyển ngành</th>
+                            <th rowspan="2" scope="col">Time khởi tạo</th>
+                            <th rowspan="2" scope="col">Người thực hiện</th>
+                            <th rowspan="2" scope="col">Trạng thái</th>
+                            <th rowspan="2" scope="col">Cập nhật lúc</th>
+                            <th rowspan="2" scope="col" class="action">Thao tác</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">Chuyên ngành</th>
+                            <th scope="col">Ngành học</th>
+                            <th scope="col">Học kỳ</th>
+                            <th scope="col">Chuyên ngành</th>
+                            <th scope="col">Ngành học</th>
+                            <th scope="col">Học kỳ</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        {{#each coursePapers}}
+                        <tr>
+                            <th scope="row">{{index @index}}</th>
+                            <td>{{checkVersions this.version 0}}</td>
+                            <td>{{checkVersions this.version 1}}</td>
+                            <td>{{checkVersions this.version 2}}</td>
+                            <td>{{checkVersions this.version 3}}</td>
+                            <td>{{checkVersions this.version 4}}</td>
+                            <td>{{checkVersions this.version 5}}</td>
+                            <td>{{checkVersions this.version 6}}</td>
+                            <td>{{checkVersions this.version 7}}</td>
+                            <td>{{this.education_requested_at}}</td>
+                            <td>
+                                {{this.education_accepted_by.name}}
+                            </td>
+                            <td>
+                                {{checkVersions this.version 8}}
+                            </td>
+                            <td>
+                                <p>{{this.updatedAt}}</p>
+                            </td>
+                            <td class="action">
+                                <button data-toggle="modal" data-target="#myModal" onclick="detail('{{this._id}}')"
+                                    class="btn btn-link">
+                                    <i class="fa fa-edit "></i> Chi tiết
+                                </button>
+                                <a href="/dao-tao/chuyen-nganh-hoc/sua/{{this._id}}">Sửa</a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Modals-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Thông tin chi tiết</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group " id="student-info">
+                    <div class="each-history">
+                        <div class="each-item">
+                            <div class="item-label">MSSV</div>
+                            <input class="item-value form-control" readonly id="student-code">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Tên</div>
+                            <input class="item-value form-control" readonly id="student-name">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Khóa học hiện tại</div>
+                            <input class="item-value form-control" readonly id="student-current-course">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Ngành học hiện tại</div>
+                            <input class="item-value form-control" readonly id="student-current-major">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Học kỳ kiện tại</div>
+                            <input class="item-value form-control" readonly id="student-current-semester">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Ngành học yêu cầu</div>
+                            <input class="item-value form-control" readonly id="student-requested-course">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Học kỳ yêu cầu</div>
+                            <input class="item-value form-control" readonly id="student-requested-semester">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Lý do yêu cầu</div>
+                            <input class="item-value form-control" readonly id="student-reason">
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Môn học</div>
+                            <div id="new-subjects" style="width: 85%;"></div>
+                        </div>
+                        <div class="each-item">
+                            <div class="item-label">Người lập phiếu</div>
+                            <input class="item-value form-control" readonly id="request-accepted-by">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-primary">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const _coursePapers = {{{ _coursePapers }}};
+    //const index = _coursePapers.data.version.length - 1;
+    const detail = async (_id) => {
+        const option = {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        }
+        const url = `/api/papers/${_id}/chuyen-nganh-hoc/`
+
+        try {
+            const res = await fetchAPI(url, option);
+            fillData(res)
+        } catch (e) { swal(`Lỗi: ${e.message}`) }
+
+    }
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const fillData = (res) => {
+        const index = res.data.version.length;
+        const { createdAt, current_course, current_major, current_semester,
+            finance_accepted_at, fullname, new_course_semester, new_course_subjects,
+            paper_result_at, paper_status, request_accepted_at,
+            requested_at, requested_course, requested_reason, requested_semester,
+            student_code, updatedAt, fee_accepted_by} = res.data.version[index - 1];
+        const { education_accepted_by, _id } = res.data;
+        document.getElementById('student-code').value = student_code;
+        document.getElementById('student-name').value = fullname;
+        document.getElementById('student-current-course').value = current_course;
+        document.getElementById('student-current-major').value = current_major;
+        document.getElementById('student-current-semester').value = current_semester;
+        document.getElementById('student-requested-course').value = requested_course;
+        document.getElementById('student-requested-semester').value = requested_semester;
+        document.getElementById('student-reason').value = requested_reason;
+        document.getElementById('request-accepted-by').value = education_accepted_by?.name;
+
+        let element = document.getElementById('new-subjects');
+        let html = '';
+        for (let i = 0; i < new_course_subjects.length; i++) {
+            let item = new_course_subjects[i];
+            html += `
+                <input style="width:50%" class="item-value form-control" readonly 
+                value="${item.code} - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.fee)}" />
+            `
+        }
+        element.innerHTML = html;
+    }
+
+</script>

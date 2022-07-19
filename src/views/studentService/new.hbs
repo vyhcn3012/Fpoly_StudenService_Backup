@@ -1,0 +1,254 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container-md">
+        <div class="row" style="margin: 0 auto;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4>Thêm mới phiếu đề nghị chuyển ngành học</h4>
+                <form role="form" action="/dich-vu-sinh-vien/chuyen-nganh-hoc/them-moi" method="post">
+                    <div class="form-group ">
+                        <label class="control-label" for="name">Ngày đề nghị</label>
+                        <input disabled type="datetime-local" class="form-control" id="requested_at"
+                            name="requested_at" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="student_code">Mã sinh viên<span
+                                id="student_code-check"></span></label>
+                        <input onchange="checkStudentCode(this.value)" class="form-control" type="text"
+                            name="student_code" id="student_code" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="fullname">Họ và tên<span id="fullname-check"></span></label>
+                        <input onchange="checkString(this.value, 'fullnameCheck')" class="form-control" type="text"
+                            name="fullname" id="fullname" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="current_semester">Kỳ hiện tại đang học tập<span
+                                id="current_semester-check"></span></label>
+                        <input onchange="checkString(this.value, 'currentSemesterCheck')" class="form-control"
+                            type="text" name="current_semester" id="current_semester" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="current_course">Ngành đang học<span
+                                id="current_course-check"></span></label>
+                        <input onchange="checkString(this.value, 'currentCourseCheck')" class="form-control" type="text"
+                            name="current_course" id="current_course" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="current_major">Chuyên ngành hẹp<span
+                                id="current_major-check"></span></label>
+                        <input onchange="checkString(this.value, 'currentMajorCheck')" class="form-control" type="text"
+                            name="current_major" id="current_major" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_course">Ngành đề nghị chuyển đến<span
+                                id="requested_course-check"></span></label>
+                        <input onchange="checkString(this.value, 'requestedCourseCheck')" class="form-control"
+                            type="text" name="requested_course" id="requested_course" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_semester">Từ học kỳ<span
+                                id="requested_semester-check"></span></label>
+                        <input onchange="checkString(this.value, 'requestedSemesterCheck')" class="form-control"
+                            type="text" name="requested_semester" id="requested_semester" />
+                    </div>
+
+                    <div class="form-group ">
+                        <label class="control-label" for="unit">Cơ sở<span id="unit-check"></span></label>
+                        <input onchange="checkString(this.value, 'unitCheck')" class="form-control" type="text"
+                            name="unit" id="unit" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_reason">Lý do<span
+                                id="requested_reason-check"></span></label>
+                        <textarea onchange="checkString(this.value, 'requestedReasonCheck')" class="form-control"
+                            type="text" name="requested_reason" id="requested_reason"></textarea>
+                    </div>
+
+                    <div class="form-group modal-footer">
+                        <a href="/dich-vu-sinh-vien/chuyen-nganh-hoc" class="btn btn-default">Quay lại</a>
+                        <button disabled id="buttonSave" onclick="onSave()" type="button"
+                            class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+    let isStudentCodeValid = false, isFullnameValid = false, isCurrentSemesterValid = false,
+        isCurrentCourseValid = false, isCurrentMajorValid = false, isRequestedCourseValid = false,
+        isRequestedSemesterValid = false, isUnitValid = false, isRequestedReasonValid = false;
+
+    let isFormValid = false;
+    let studentCodePattern = /^PS[0-9]{5}$/;
+
+    const requestedAtInput = document.getElementById('requested_at');
+    const studentCodeInput = document.getElementById('student_code');
+    const fullnameInput = document.getElementById('fullname');
+    const currentSemesterInput = document.getElementById('current_semester');
+    const currentCourseInput = document.getElementById('current_course');
+    const currentMajorInput = document.getElementById('current_major');
+    const requestedCourseInput = document.getElementById('requested_course');
+    const requestedSemesterInput = document.getElementById('requested_semester');
+    const unitInput = document.getElementById('unit');
+    const requestedReasonInput = document.getElementById('requested_reason');
+    const buttonSave = document.getElementById('buttonSave');
+
+    const studentCodeCheck = document.getElementById('student_code-check');
+    const fullnameCheck = document.getElementById('fullname-check');
+    const currentSemesterCheck = document.getElementById('current_semester-check');
+    const currentCourseCheck = document.getElementById('current_course-check');
+    const currentMajorCheck = document.getElementById('current_major-check');
+    const requestedCourseCheck = document.getElementById('requested_course-check');
+    const requestedSemesterCheck = document.getElementById('requested_semester-check');
+    const unitCheck = document.getElementById('unit-check');
+    const requestedReasonCheck = document.getElementById('requested_reason-check');
+
+    const checkType = {
+        studentCodeCheck: { status: false, ele: studentCodeCheck },
+        fullnameCheck: { status: false, ele: fullnameCheck },
+        currentSemesterCheck: { status: false, ele: currentSemesterCheck },
+        currentCourseCheck: { status: false, ele: currentCourseCheck },
+        currentMajorCheck: { status: false, ele: currentMajorCheck },
+        requestedCourseCheck: { status: false, ele: requestedCourseCheck },
+        requestedSemesterCheck: { status: false, ele: requestedSemesterCheck },
+        unitCheck: { status: false, ele: unitCheck },
+        requestedReasonCheck: { status: false, ele: requestedReasonCheck },
+    }
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const formatDate = (a, type) => {
+        let date = new Date(a);
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        month = month.toString().length === 1 ? '0' + month : month;
+        let day = date.getDate().toString().length === 1 ?
+            '0' + date.getDate().toString() : date.getDate().toString();
+        if (type == 1) {
+            return day + '-' + month + '-' + year;
+        }
+        let h = date.getHours();
+        let m = date.getMinutes();
+        h = h.toString().length === 1 ? '0' + h : h;
+        m = m.toString().length === 1 ? '0' + m : m;
+        return year + '-' + month + '-' + day + 'T' + h + ':' + m;
+    }
+
+    requestedAtInput.value = formatDate(new Date(), 2);
+
+    const checkStudentCode = value => {
+        if (value.match(studentCodePattern)) {
+            checkType.studentCodeCheck.status = true;
+            checkType.studentCodeCheck.ele.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+        } else {
+            checkType.studentCodeCheck.status = false;
+            checkType.studentCodeCheck.ele.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+        }
+        isFormValid = Object.keys(checkType).every(key => checkType[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+
+    const checkString = (value, type) => {
+        if (value && value.trim().length > 0) {
+            checkType[type].status = true;
+            checkType[type].ele.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+        } else {
+            checkType[type].status = false;
+            checkType[type].ele.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+        }
+        isFormValid = Object.keys(checkType).every(key => checkType[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+
+    const onSave = async () => {
+        if (!isFormValid) return;
+        swal("Xác nhận thêm mới phiếu đề nghị chuyển ngành học?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+                const url = `/api/papers/dich-vu-sinh-vien/chuyen-nganh-hoc/them-moi`;
+
+                const body = {
+                    requested_at: new Date(),
+                    student_code: studentCodeInput.value,
+                    fullname: fullnameInput.value,
+                    current_semester: currentSemesterInput.value,
+                    current_course: currentCourseInput.value,
+                    current_major: currentMajorInput.value,
+                    requested_course: requestedCourseInput.value,
+                    requested_semester: requestedSemesterInput.value,
+                    unit: unitInput.value,
+                    requested_reason: requestedReasonInput.value,
+                }
+
+                const option = {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    if(result.error == false) {
+                        window.location = '/dich-vu-sinh-vien/chuyen-nganh-hoc';
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+
+
+
+
+
+
+
+</script>

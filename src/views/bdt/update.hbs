@@ -1,0 +1,394 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container-md">
+        <div class="row" style="margin: 0 auto;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4>Đào tạo điền form</h4>
+                <form role="form" action="/dao-tao/them-moi/:id" method="post">
+                    <div class="form-group ">
+                        <label class="control-label" for="name">Ngày đề nghị</label>
+                        <input disabled type="datetime-local" class="form-control" id="requested_at"
+                            name="requested_at" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="student_code">Mã sinh viên<span
+                                id="student_code-check"></span></label>
+                        <input onchange="checkStudentCode(this.value)" class="form-control" type="text"
+                            name="student_code" id="student_code"/>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="fullname">Họ và tên<span id="fullname-check"></span></label>
+                        <input onchange="checkString(this.value, 'fullnameCheck')" class="form-control" type="text"
+                            name="fullname" id="fullname" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="current_semester">Kỳ hiện tại đang học tập<span
+                                id="current_semester-check"></span></label>
+                        <input onchange="checkString(this.value, 'currentSemesterCheck')" class="form-control"
+                            type="text" name="current_semester" id="current_semester" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_semester">Trình độ tiếng anh hiện tại<span
+                                id="english-level-check"></span></label>
+                        <input onchange="checkString(this.value, 'englishLevelCheck')" class="form-control"
+                            type="text" name="english_level" id="english_level" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label">Ngành đang học<span
+                                id="current_course-check"></span></label>
+                        <select class="form-control" id="current_course" name="current_course">
+                            {{#each major_name}}
+                                <option>{{this.course}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label">Chuyên ngành hẹp<span
+                                id="current_major-check"></span></label>
+                        <select class="form-control" id="current_major" name="current_major">
+                                {{#each major}}
+                                <option>{{this.major_name}}</option>
+                                {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label">Ngành đề nghị chuyển đến<span</span></label>
+                        <select class="form-control" id="requested_course" name="requested_course">
+                                {{#each major_name}}
+                                <option >{{this.course}}</option>
+                                {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label">Chuyên ngành hẹp mới<span></span></label>
+                        <select class="form-control" id="requested_major" name="requested_major">
+                                {{#each major}}
+                                <option selected>{{this.major_name}}</option>
+                                {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_semester">Từ học kỳ<span
+                                id="requested_semester-check"></span></label>
+                        <input onchange="checkString(this.value, 'requestedSemesterCheck')" class="form-control"
+                            type="text" name="requested_semester" id="requested_semester" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="requested_reason">Lý do<span
+                                id="requested_reason-check"></span></label>
+                        <textarea onchange="checkString(this.value, 'requestedReasonCheck')" class="form-control"
+                            type="text" name="requested_reason" id="requested_reason"></textarea>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="new_course_subjects_input">Môn học mới
+                            <span class="btn btn-link" onclick="initModal()" data-target="#myModal"
+                                data-toggle="modal">Chọn</span>
+                        </label>
+
+                        <ul id="new-course-subjects">
+
+                        </ul>
+                    </div>
+                    <div class="form-group modal-footer">
+                        <a href="/dao-tao/chuyen-nganh-hoc" class="btn btn-default">Quay lại</a>
+                        <button disabled id="buttonSave" onclick="onSave()" type="button"
+                            class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Danh sách môn học</h4>
+            </div>
+            <div class="modal-body text-center">
+                <form id="course_form">
+                    <div class="new_course_container" id="new_course_container">
+                    </div>
+                </form>
+            </div>
+            <div class="form-group modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button onclick="chooseCourses()" data-dismiss="modal" type="button"
+                    class="btn btn-primary">Chọn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    let _courses = {{{ _courses }}};
+    const _coursePapers = {{{ _coursePapers }}}; 
+    
+    let isFormValid = false;
+    let studentCodePattern = /^PS[0-9]{5}$/;
+
+    const requestedAtInput = document.getElementById('requested_at');
+    const studentCodeInput = document.getElementById('student_code');
+    const fullnameInput = document.getElementById('fullname');
+    const currentSemesterInput = document.getElementById('current_semester');
+    const currentCourseInput = document.getElementById('current_course');
+    const currentMajorInput = document.getElementById('current_major');
+    const requestedCourseInput = document.getElementById('requested_course');
+    const requestedSemesterInput = document.getElementById('requested_semester');
+    const requestedReasonInput = document.getElementById('requested_reason');
+    const englishLevelInput = document.getElementById('english_level');
+    const requestedMajorInput = document.getElementById('requested_major');
+
+    const studentCodeCheck = document.getElementById('student_code-check');
+    const fullnameCheck = document.getElementById('fullname-check');
+    const currentSemesterCheck = document.getElementById('current_semester-check');
+    const requestedSemesterCheck = document.getElementById('requested_semester-check');
+    const requestedReasonCheck = document.getElementById('requested_reason-check');
+    const newCourseSubjectsInput = document.getElementById('new_course_subjects_input');
+    const newCourseSubjectsButton = document.getElementById('new_course_subjects_button');
+    const buttonSaveInput = document.getElementById('buttonSave');
+    const englishLevelCheck = document.getElementById('english-level-check');
+    const newCourseContainer = document.getElementById('new_course_container');
+
+    const checkType = {
+        englishLevelCheck: { status: false, ele: englishLevelCheck },
+        studentCodeCheck: { status: false, ele: studentCodeCheck },
+        fullnameCheck: { status: false, ele: fullnameCheck },
+        currentSemesterCheck: { status: false, ele: currentSemesterCheck },
+        requestedSemesterCheck: { status: false, ele: requestedSemesterCheck },
+        requestedReasonCheck: { status: false, ele: requestedReasonCheck },    }
+
+    const checkStudentCode = value => {
+        if (value.match(studentCodePattern)) {
+            checkType.studentCodeCheck.status = true;
+            checkType.studentCodeCheck.ele.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+        } else {
+            checkType.studentCodeCheck.status = false;
+            checkType.studentCodeCheck.ele.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+        }
+        isFormValid = Object.keys(checkType).every(key => checkType[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+
+    const checkString = (value, type) => {
+        if (value && value.trim().length > 0) {
+            checkType[type].status = true;
+            checkType[type].ele.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+        } else {
+            checkType[type].status = false;
+            checkType[type].ele.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+        }
+        isFormValid = Object.keys(checkType).every(key => checkType[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const formatDate = (a, type) => {
+        let date = new Date(a);
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        month = month.toString().length === 1 ? '0' + month : month;
+        let day = date.getDate().toString().length === 1 ?
+            '0' + date.getDate().toString() : date.getDate().toString();
+        if (type == 1) {
+            return day + '-' + month + '-' + year;
+        }
+        let h = date.getHours();
+        let m = date.getMinutes();
+        h = h.toString().length === 1 ? '0' + h : h;
+        m = m.toString().length === 1 ? '0' + m : m;
+        return year + '-' + month + '-' + day + 'T' + h + ':' + m;
+    }
+
+    requestedAtInput.value = formatDate(new Date(), 2);
+
+    let subjects = [];
+
+    const getValue = () => {
+        const index = _coursePapers.version.length - 1;
+        const { student_code, fullname, current_semester, requested_semester, english_level, current_course, current_major, requested_course, requested_major, requested_reason, new_course_subjects } = _coursePapers.version[index];
+        studentCodeInput.setAttribute('value', student_code);
+        fullnameInput.setAttribute('value', fullname);
+        currentSemesterInput.setAttribute('value', current_semester);
+        requestedSemesterInput.setAttribute('value', requested_semester);
+        englishLevelInput.setAttribute('value', english_level);
+        requestedReasonInput.value = requested_reason;
+        currentCourseInput.value = current_course;
+        currentMajorInput.value = current_major;
+        requestedCourseInput.value = requested_course;
+        requestedMajorInput.value = requested_major;
+
+        subjects = new_course_subjects;
+        const ul = document.getElementById('new-course-subjects');
+        ul.innerHTML = '';
+        subjects.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="btn">${item.code}</span> -
+            <span>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.fee)}</span>
+             -<span class="btn btn-link"  onclick="remove('${item.code}')">Xoá</span>`;
+            ul.appendChild(li);
+        });
+    }
+
+    getValue();
+
+    const initModal = () => {
+        subjects = [];
+        let html = '';
+        for (let i = 0; i < _courses.length; i++) {
+            const c = _courses[i];
+            html += `
+                <div class="form-check new_course_item">
+                    <input class="form-check-input" type="checkbox" id="check${c.code}" name="new_courses"
+                        value="${c.code}">
+                    <label class="form-check-label" for="check${c.code}">
+                        <span>${c.code}</span> - <span>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(c.fee)}</span>
+                    </label>
+                </div>
+            `
+        }
+        newCourseContainer.innerHTML = html;
+    }
+
+    initModal();
+
+    const chooseCourses = () => {
+        const new_courses = document.getElementsByName("new_courses");
+        for (let i = 0; i < new_courses.length; i++) {
+            let item = new_courses[i];
+            if (item.checked) {
+                add(item.value)
+            }
+        }
+
+    }
+
+    const add = (code, fee) => {
+        if (code.trim().length == 0) return;
+        let check = subjects.filter(s => s.code === code)[0];
+        if (check) return;
+        let oneSubject = _courses.filter(item => item.code == code)[0];
+        subjects.push(oneSubject);
+        const ul = document.getElementById('new-course-subjects');
+        ul.innerHTML = '';
+        subjects.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="btn">${item.code}</span> -
+            <span>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.fee)}</span>
+             -<span class="btn btn-link"  onclick="remove('${item.code}')">Xoá</span>`;
+            ul.appendChild(li);
+        });
+    }
+
+    const remove = code => {
+        subjects = subjects.filter(s => s.code != code);
+        const ul = document.getElementById('new-course-subjects');
+        ul.innerHTML = '';
+        subjects.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="btn">${item.code}</span> - 
+            <span>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.fee)}</span>
+             - <span class="btn btn-link"  onclick="remove('${item.code}')">Xoá</span>`;
+            ul.appendChild(li);
+        });
+    }
+ 
+    const onSave = async () => {
+        if (!isFormValid) return;
+        swal("Xác nhận tạo phiếu đề nghị chuyển ngành học?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+
+                const url = `/api/papers/dao-tao/chuyen-nganh-hoc/cap-nhat/`;
+                const body = {
+                    idPaper: _coursePapers._id,
+                    requested_at: new Date(),
+                    student_code: studentCodeInput.value,
+                    fullname: fullnameInput.value,
+                    current_semester: currentSemesterInput.value,
+                    current_course: currentCourseInput.value,
+                    current_major: currentMajorInput.value,
+                    requested_course: requestedCourseInput.value,
+                    requested_semester: requestedSemesterInput.value,
+                    requested_reason: requestedReasonInput.value,
+                    english_level: englishLevelInput.value,
+                    requested_major: requestedMajorInput.value,
+                    new_course_subjects: subjects,
+                }
+
+                const option = {
+                    method: 'put',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    if (result.error == false) {
+                        swal("Thành công", "", "success");
+                        window.location = '/dao-tao/chuyen-nganh-hoc';
+                    } else {
+                        swal("Thất bại", result.message, "error");
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+
+</script>

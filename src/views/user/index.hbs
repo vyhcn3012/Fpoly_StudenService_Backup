@@ -1,0 +1,230 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container">
+        <div class="row">
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Advanced Tables -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên</th>
+                                        <th>Email</th>
+                                        <th>Vai trò</th>
+                                        <th>Tình trạng</th>
+                                        <th>Cập nhật lúc</th>
+                                        <th class="action">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    {{#each users}}
+                                    <tr>
+                                        <td>{{index @index}}</td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.email}}</td>
+                                        <td>{{getRole this.role}}</td>
+                                        <td id="{{this._id}}">
+                                            {{#if this.available}}
+                                            <input class="form-control" onchange="updateAvailable('{{this._id}}', 0, {{this.role}})"
+                                                type="checkbox" checked />
+                                            <span>Hoạt động</span>
+                                            {{else}}
+                                            <input class="form-control" onchange="updateAvailable('{{this._id}}', 1, {{this.role}})"
+                                                type="checkbox" />
+                                            <span>Không hoạt động</span>
+                                            {{/if}}
+                                        </td>
+                                        <td>
+                                            <p>{{formatDate this.updatedAt 1}}</p>
+                                            <p>{{formatTime this.updatedAt 1}}</p>
+                                        </td>
+                                        <td class="action">
+                                            {{#if this.isEditable}}
+                                            <button data-toggle="modal" data-target="#myModal"
+                                                onclick="goEdit('{{this._id}}', {{this.role}})" class="btn btn-link">
+                                                <i class="fa fa-edit "></i> Thay đổi vai trò
+                                            </button>
+                                            {{/if}}
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            {{!-- <div class="col-md-6">
+                                {{#if }}
+                                <a href="/users?page={{previous}}&department={{department}}"
+                                    class="btn btn-link pull-left">
+                                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                    <span>Trang trước</span>
+                                </a>
+                                {{/if}}
+                            </div>
+                            <div class="col-md-6">
+                                {{#if}}
+                                <a href="/users?page={{next}}&department={{department}}"
+                                    class="btn btn-link pull-right">
+                                    <span>Trang sau</span>
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </a>
+                                {{/if}}
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+                <!--End Advanced Tables -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Modals-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Thay đổi vai trò</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <form role="form">
+                        <div class="form-group ">
+                            <label class="control-label" for="name">Tên vai trò</label>
+                            <input type="hidden" name="id" id="id" />
+                            <select class="form-control" id="role" name="role">
+                            </select>
+                        </div>
+                        <div class="form-group modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button id="buttonSave" onclick="onSave()" type="button"
+                                class="btn btn-primary">Lưu</button>
+                            <h2 id="error-msg"></h2>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+    let _users = {{{ _users }}};
+
+    const roles = [
+        { name: 'Đào tạo', value: 4 },
+        { name: 'Tài vụ', value: 3 },
+        { name: 'Dịch vụ sinh viên', value: 2 },
+        { name: 'Nhân viên', value: 1 }
+    ]
+
+    const goEdit = (id, role) => {
+        document.getElementById('id').value = id;
+        const el = document.getElementById('role');
+        el.innerHTML = `
+            ${roles.map(i => {
+            if (i.value == role) {
+                return `<option selected value='${i.value}'>${i.name} </option>`
+            }
+            return `<option value='${i.value}'>${i.name} </option>`
+        })}        
+        `
+    }
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const onSave = async () => {
+        const id = document.getElementById('id').value;
+        const newRole = document.getElementById('role').value;
+
+        const body = { newRole }
+
+        const option = {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }
+        const url = `/api/users/${id}`;
+
+        try {
+            await fetchAPI(url, option);
+            window.location.href = '/users';
+        } catch (e) { swal(`Lỗi: ${e.message}`) }
+    }
+
+    const updateAvailable = async (id, type, role) => {
+        const url = `/api/users/${id}`;
+        const body = { available: type == 1 ? true : false, newRole:  role}
+
+        const option = {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }
+        try {
+            const result = await fetchAPI(url, option);
+            if (result && !result.error) {
+                let ele = document.getElementById(id);
+                ele.innerHTML = `
+                    ${type == 1 ? `
+                        <input class="form-control" onchange="updateAvailable('${id}', 0)"
+                                            checked  type="checkbox"  /> <span>Hoạt động</span>
+                    `: `
+                        <input class="form-control" onchange="updateAvailable('${id}', 1)"
+                                                type="checkbox" /> <span>Không hoạt động</span>
+                    `}
+                `
+            } else {
+                swal(`Lỗi: ${result.message}`)
+            }
+        } catch (e) { swal(`Lỗi: ${e.message}`) }
+    }
+</script>

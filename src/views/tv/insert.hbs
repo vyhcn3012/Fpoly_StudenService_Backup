@@ -1,0 +1,154 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container-md">
+        <div class="row" style="margin: 0 auto;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4>Tài vụ điền form</h4>
+                <form role="form" action="/dao-tao/them-moi/:id" method="post" id="form">
+
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+
+    let paper = {{{ _paper }}}
+    let subjects = paper.new_course_subjects;
+    let isFormValid = false;
+
+    const checkForm = {}
+
+    const init = () => {
+        const form = document.getElementById('form');
+        let html = '';
+        subjects.forEach(subject => {
+            html += `<div class="form-group ">
+                        <label style="width: 100%;" for="class="control-label" for="name">Môn ${subject.name}<span style="float: right;" id="${subject.name}-check"></span></label>
+                        <input onkeydown="checkNumber(this.value, '${subject.name}')" onkeyup="checkNumber(this.value, '${subject.name}')" class="form-control" type="text" id="${subject.name}" />
+                    </div>`;
+            checkForm[subject.name] = { status: false }
+        });
+        form.innerHTML = html;
+        form.innerHTML += `
+                    <div class="form-group modal-footer">
+                        <a href="/tai-vu/chuyen-nganh-hoc" class="btn btn-default">Quay lại</a>
+                        <button disabled id="buttonSave" onclick="onSave()" type="button"
+                            class="btn btn-primary">Lưu</button>
+                    </div>
+        `
+    }
+
+    init();
+
+    const buttonSave = document.getElementById('buttonSave');
+
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+
+    const checkNumber = (val, name) => {
+        const nameCheck = `${name}-check`;
+        const span = document.getElementById(nameCheck);
+        if (isNaN(val)) {
+            span.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+            setValue(name, 0);
+            checkForm[name].status = false;
+        } else {
+            span.innerHTML = `<i>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val)}</i>`
+            setValue(name, val);
+            checkForm[name].status = true;
+        }
+        isFormValid = Object.keys(checkForm).every(key => checkForm[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+
+    const setValue = (name, val) => {
+        subjects = subjects.map(subject => {
+            if (subject.name === name) {
+                subject.fee = val;
+            }
+            return subject;
+        });
+    }
+
+
+
+    const onSave = async () => {
+        if (!isFormValid) return;
+        swal("Xác nhận cập nhật phiếu đề nghị chuyển ngành học?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+
+                const url = `/api/papers/tai-vu/chuyen-nganh-hoc/`;
+                const body = {
+                    new_course_subjects: subjects,
+                    idPaper: '{{id}}'
+                }
+
+                const option = {
+                    method: 'put',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    if (result.error == false) {
+                        swal("Thành công", "", "success");
+                        window.location = '/tai-vu/chuyen-nganh-hoc';
+                    } else {
+                        swal("Thất bại", result.message, "error");
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+
+
+</script>

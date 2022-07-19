@@ -1,0 +1,171 @@
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img src="/media/hello_world.jpg" width="200" class="img-logo" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- LOGO HEADER END-->
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- MENU SECTION END-->
+<div class="content-wrapper">
+    <div class="container-md">
+        <div class="row" style="margin: 0 auto;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4>Thêm mới chuyên ngành học</h4>
+                <form role="form" action="/courses/chuyen-nganh/{{Onecourse._id}}/cap-nhat" method="post">
+                    <div class="form-group ">
+                        <label class="control-label" for="course_name">Ngành học<span id="fullname-check"></span></label>
+                        <input class="form-control" type="text" value="{{Onecourse.course_name}}"
+                            name="course_name" id="course_name" />
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label" for="major_name">Chuyên ngành hẹp<span
+                                id="current_semester-check"></span></label>
+                            {{#each Onecourse.majors}}
+                            <input disabled style="margin-bottom:10px ;" class="form-control" type="text" value="{{this.major_name}}"
+                            name="major_name" id="major_name" />
+                            {{/each}}    
+                    </div>
+                     <div class="form-group ">
+                        <label class="control-label" for="course_name">Available<span id="fullname-check"></span></label>
+                        <input disabled class="form-control" type="text" value="{{Onecourse.available}}"
+                            name="available" id="available" />
+                    </div>
+                    <div class="form-group modal-footer">
+                        <a href="/dich-vu-sinh-vien/chuyen-nganh-hoc" class="btn btn-default">Quay lại</a>
+                        <button id="buttonSave" onclick="addMajor()" type="button"
+                            class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- CONTENT-WRAPPER SECTION END-->
+<section class="footer-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                &copy; 2022 Ít nhưng dài lâu
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+   
+    const majors=[];
+    const addMajor = async () => {
+        const major_name = document.getElementById('major_name').value;
+        if(major_name.length > 0){
+            const check=majors.find(major=>major.major_name===major_name);
+            if(check){
+                alert('Chuyên ngành đã tồn tại');
+            }
+            const major = {
+                major_name: major_name,
+                available:true
+            };
+            majors.push(major);
+            document.getElementById('major_name').value = '';
+            
+        }
+       
+    }
+    const checkString = (value, type) => {
+        if (value && value.trim().length > 0) {
+            checkType[type].status = true;
+            checkType[type].ele.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+        } else {
+            checkType[type].status = false;
+            checkType[type].ele.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>'
+        }
+        isFormValid = Object.keys(checkType).every(key => checkType[key].status);
+        buttonSave.disabled = !isFormValid
+    }
+    
+    const course_name = document.getElementById('course_name');
+    const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+    }
+    const checkCoursesName = async () => {
+                const course_name = document.getElementById('course_name').value;
+                const url = `/api/courses/${course_name}/getByCourseName`;
+
+                const option = {
+                    method: 'get',
+                    headers: { 'Content-Type': 'application/json' }     
+                }
+                try {
+                    const result = await fetchAPI(url, option);
+                    return result;
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+    }
+    const onSave = async () => {
+        
+        swal("Xác nhận ?", {
+            buttons: {
+                cancel: "Hủy",
+                confirm: 'Xác nhận',
+            },
+        })
+            .then(async (value) => {
+                const url = `/api/courses/them-moi`;
+
+                const body = {
+                    course_name: course_name.value,
+                    majors: majors,
+                }
+
+                const option = {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }
+                try {
+                    const checkCourse=checkCoursesName();
+                    if (checkCourse) {
+                            document.getElementById('course_name').value = '';
+                            swal('Tên ngành đã tồn tại');
+                            return;
+                    }
+                    const result = await fetchAPI(url, option);
+                    if(result.error == false) {
+                        window.location = '/';
+                    }
+
+                } catch (e) { swal(`Lỗi: ${e.message}`); }
+            })
+    }
+
+
+
+
+
+
+
+</script>
